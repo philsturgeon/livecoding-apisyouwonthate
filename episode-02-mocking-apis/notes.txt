@@ -1,3 +1,5 @@
+[Video](https://youtu.be/xRJovXtzLPc)
+
 Using a mock server, you can basically see how an API would work, without actually
 building anything.
 
