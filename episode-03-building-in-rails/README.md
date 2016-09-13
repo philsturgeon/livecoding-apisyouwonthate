@@ -1,4 +1,6 @@
 
+Video: https://youtu.be/A4XLCSZBN24
+
 https://github.com/rails-api/active_model_serializers/blob/master/docs/general/getting_started.md
 
 For this video we'll be using the ActiveModel Serializer gem, which you'll need to include in your `Gemfile`:
