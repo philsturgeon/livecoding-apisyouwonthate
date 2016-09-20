@@ -5,9 +5,6 @@ class ManufacturerSerializer < ActiveModel::Serializer
 
   has_many :products
 
-  link(:self) { manufacturer_url(object) }
-
-  link :products do
-    href "/products?manufacturer=#{object.id}"
-  end
+  link(:self)     { manufacturer_url(object) }
+  link(:products) { products_url(manufacturer: object.id) }
 end

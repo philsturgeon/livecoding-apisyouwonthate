@@ -5,7 +5,7 @@ class ProductSerializer < ActiveModel::Serializer
 
   belongs_to :manufacturer
 
-  link(:self) { product_url(object) }
+  link(:self)         { product_url(object) }
   link(:manufacturer) { manufacturer_url(object) }
 
   def type
