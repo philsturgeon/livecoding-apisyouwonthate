@@ -1,0 +1,25 @@
+dry-run: null
+hookfiles: null
+language: ruby
+sandbox: false
+server: 'bundle exec rails server -p 3002'
+server-wait: 5
+init: false
+custom:
+names: false
+only: []
+output: []
+header: []
+sorted: true
+user: null
+inline-errors: true
+details: false
+method: ['GET']
+color: true
+level: info
+timestamp: false
+silent: false
+path: []
+config: ./dredd.yml
+blueprint: docs/blueprint.md
+endpoint: 'http://localhost:3002'
