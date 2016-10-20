@@ -205,6 +205,7 @@ Welcome to the documentation, we'll bla bla.
         - cider
         - perry
     - apv: 7.4 (number, optional)
+    - volume (number, required)
     - image_url: `http://example.com/ciders/old-bris.jpg` (string, optional) - URL
     of cider photo.
 
