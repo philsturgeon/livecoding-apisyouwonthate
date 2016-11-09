@@ -1,0 +1,15 @@
+
+en:
+  error_messages:
+
+    # Products
+    product_not_found:
+      code: 20101
+      title: "Could not find product"
+      detail: "This product does not exist, or has been deleted. Product can be removed by manufacturers or admins."
+
+    # Manufacturers
+    manufacturers_not_found:
+      code: 20201
+      title: "Could not find manufacturer"
+      detail: "This manufacturer is no longer available."

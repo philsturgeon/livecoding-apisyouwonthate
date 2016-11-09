@@ -1,10 +1,7 @@
 class ProductsController < ApplicationController
 
-  rescue_from 'ActiveRecord::RecordNotFound' do |e|
-    render json: { errors: [{
-      title: 'Could not find produt.',
-      details: e.message
-    }] }, status: :not_found
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render_json_error :not_found, :product_not_found
   end
 
   def index
@@ -21,11 +18,11 @@ class ProductsController < ApplicationController
     product = Product.new(create_params)
 
     if !product.save
-      render status: :bad_request
+      render_json_validation_error product
       return
     end
 
-    render json: product.reload, status: :ok
+    render json: product.reload, status: :created
   end
 
   def update
