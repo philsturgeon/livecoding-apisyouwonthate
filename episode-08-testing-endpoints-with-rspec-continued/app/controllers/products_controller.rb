@@ -29,7 +29,7 @@ class ProductsController < ApplicationController
     product = Product.find(params[:id])
 
     if !product.update(update_params)
-      render status: :bad_request
+      render_json_validation_error product
       return
     end
 
@@ -39,7 +39,7 @@ class ProductsController < ApplicationController
   def destroy
     product = Product.find(params[:id])
     product.destroy!
-    render nothing: true, status: :no_content
+    head :no_content
   end
 
   private
