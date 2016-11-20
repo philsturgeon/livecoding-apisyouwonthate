@@ -21,8 +21,6 @@ Now there will be a new generator available, called `resource`:
 $ rails g resource manufacturer name:string about:string city:string country:string manufacturer:references
 
 $ rails g resource product name:string description:string product_type:string apv:float image_url:string references:products
-
-$ rails g resource review body:string rating:string name:string
 ~~~
 
 These fields are taken from our API Blueprint documentation, and we already know the types.
