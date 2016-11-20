@@ -6,6 +6,8 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'pry'
 require 'spec_helper'
 require 'rspec/rails'
+require 'support/default_format'
+
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -55,4 +57,10 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # Enable shorter syntax for create/build
+  config.include FactoryGirl::Syntax::Methods
+
+  # Accept JSON by default
+  config.include DefaultFormat, type: :request
 end

@@ -23,15 +23,17 @@ RSpec.describe ProductsController do
   end
 
   describe 'GET /products' do
-    subject { get :index }
-
-    it { is_expected.to have_http_status(:ok) }
+    it 'will be ok' do
+      get products_url
+      expect(response).to have_http_status(:ok)
+    end
 
     context 'when we only have one item' do
       let!(:product) { create(:product) }
 
       it 'will retrieve records in valid JSON-API format' do
-        expect(subject.body).to include_json(data: [valid_contract])
+        get products_url
+        expect(response).to include_json(data: [valid_contract])
       end
     end
 
@@ -51,12 +53,13 @@ RSpec.describe ProductsController do
     context 'when product exists' do
       let(:product) { create(:product) }
 
-      subject { get :show, params: { id: "#{product.id}" } }
+      # subject { get :show, params: { id: "#{product.id}" } }
 
       it { is_expected.to have_http_status(:ok) }
 
       it 'will retrieve record in valid JSON-API format' do
-        expect(subject.body).to include_json(data: valid_contract)
+        get product_url(product)
+        expect(response.body).to include_json(data: valid_contract)
       end
     end
 
