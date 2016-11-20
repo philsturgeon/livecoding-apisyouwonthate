@@ -33,6 +33,7 @@ RSpec.describe ProductsController do
 
       it 'will retrieve records in valid JSON-API format' do
         get products_url
+        puts response.body.inspect
         expect(response.body).to include_json(data: [valid_contract])
       end
     end
