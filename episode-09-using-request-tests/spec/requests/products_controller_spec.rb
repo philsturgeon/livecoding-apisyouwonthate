@@ -23,15 +23,17 @@ RSpec.describe ProductsController do
   end
 
   describe 'GET /products' do
-    subject { get :index }
-
-    it { is_expected.to have_http_status(:ok) }
+    it 'will be ok' do
+      get products_url
+      expect(response).to have_http_status(:ok)
+    end
 
     context 'when we only have one item' do
       let!(:product) { create(:product) }
 
       it 'will retrieve records in valid JSON-API format' do
-        expect(subject.body).to include_json(data: [valid_contract])
+        get products_url
+        expect(response.body).to include_json(data: [valid_contract])
       end
     end
 
@@ -41,7 +43,8 @@ RSpec.describe ProductsController do
       end
 
       it 'will only return 10 results' do
-        results = JSON.parse(subject.body)
+        get products_url
+        results = JSON.parse(response.body)
         expect(results["data"].size).to eql(10)
       end
     end
@@ -51,19 +54,27 @@ RSpec.describe ProductsController do
     context 'when product exists' do
       let(:product) { create(:product) }
 
-      subject { get :show, params: { id: "#{product.id}" } }
+      before { get product_url(product) }
 
-      it { is_expected.to have_http_status(:ok) }
+      it 'will be ok' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'will be JSON' do
+        expect(response.content_type).to eql('application/json')
+      end
 
       it 'will retrieve record in valid JSON-API format' do
-        expect(subject.body).to include_json(data: valid_contract)
+        expect(response.body).to include_json(data: valid_contract)
       end
     end
 
     context 'when product does not exist' do
-      subject { get :show, params: { id: "nonsense" } }
+      before { get product_url("nonsense") }
 
-      it { is_expected.to have_http_status(:not_found) }
+      it 'will not be found' do
+        expect(response).to have_http_status(:not_found)
+      end
 
       it 'will return not found error message' do
         error = {
@@ -72,7 +83,7 @@ RSpec.describe ProductsController do
           "code"=>"product_not_found",
           "detail"=>"This product does not exist, or has been deleted. Product can be removed by manufacturers or admins."
         }
-        expect(subject.body).to include_json(errors: [error])
+        expect(response.body).to include_json(errors: [error])
       end
     end
   end
@@ -110,12 +121,14 @@ RSpec.describe ProductsController do
     end
 
     context 'with valid payload' do
-      subject { post :create, params: valid_payload }
+      before { post products_url, params: valid_payload }
 
-      it { is_expected.to have_http_status(:created) }
+      it 'will have a :created response' do
+        expect(response).to have_http_status(:created)
+      end
 
       it 'will respond with newly created product' do
-        expect(subject.body).to include_json(data: {
+        expect(response.body).to include_json(data: {
           attributes: {
             name: "New Thing 2",
             description: "BLWDFSDFKSDJFSDJF.",
@@ -125,12 +138,14 @@ RSpec.describe ProductsController do
     end
 
     context 'with invalid payload' do
-      subject { post :create, params: invalid_payload }
+      before { post products_url, params: invalid_payload }
 
-      it { is_expected.to have_http_status(:bad_request) }
+      it 'will have a :bad_request response' do
+        expect(response).to have_http_status(:bad_request)
+      end
 
       it 'will respond with newly created product' do
-        expect(subject.body).to include_json(
+        expect(response.body).to include_json(
           errors: [{
             source: { pointer: "/data/attributes/name" },
             detail: "can't be blank",
@@ -177,12 +192,14 @@ RSpec.describe ProductsController do
       let(:product) { create(:product) }
 
       context 'with valid payload' do
-        subject { post :update, params: { id: "#{product.id}" }.merge(valid_payload) }
+        before { patch product_url(product), params: valid_payload }
 
-        it { is_expected.to have_http_status(:ok) }
+        it 'will have an :ok response' do
+          expect(response).to have_http_status(:ok)
+        end
 
         it 'will respond with newly created product' do
-          expect(subject.body).to include_json(data: {
+          expect(response.body).to include_json(data: {
             attributes: {
               name: "Updated Cider",
               description: "Some new name.",
@@ -192,24 +209,28 @@ RSpec.describe ProductsController do
       end
 
       context 'with invalid payload' do
-        subject { post :update, params: { id: "#{product.id}" }.merge(invalid_payload) }
+        before { patch product_url(product), params: invalid_payload }
 
-        it { is_expected.to have_http_status(:bad_request) }
+        it 'will have a :bad_request response' do
+          expect(response).to have_http_status(:bad_request)
+        end
 
         it 'will respond with newly updated product' do
           error = {
             source: { pointer: "/data/attributes/name" },
             detail: "can't be blank",
           }
-          expect(subject.body).to include_json(errors: [error])
+          expect(response.body).to include_json(errors: [error])
         end
       end
     end
 
     context 'when product does not exist' do
-      subject { get :update, params: { id: "nonsense" } }
+      before { patch product_url('nonsense') }
 
-      it { is_expected.to have_http_status(:not_found) }
+      it 'will have a :not_found response' do
+        expect(response).to have_http_status(:not_found)
+      end
 
       it 'will return not found error message' do
         error = {
@@ -218,7 +239,7 @@ RSpec.describe ProductsController do
           "code"=>"product_not_found",
           "detail"=>"This product does not exist, or has been deleted. Product can be removed by manufacturers or admins."
         }
-        expect(subject.body).to include_json(errors: [error])
+        expect(response.body).to include_json(errors: [error])
       end
     end
   end
@@ -228,19 +249,23 @@ RSpec.describe ProductsController do
     context 'when product exists' do
       let(:product) { create(:product) }
 
-      subject { delete :destroy, params: { id: "#{product.id}" } }
+      before { delete product_url(product) }
 
-      it { is_expected.to have_http_status(:no_content) }
+      it 'will have a :no_content response' do
+        expect(response).to have_http_status(:no_content)
+      end
 
       it 'will respond with no body' do
-        expect(subject.body).to be_empty
+        expect(response.body).to be_empty
       end
     end
 
     context 'when product does not exist' do
-      subject { delete :destroy, params: { id: "nonsense" } }
+      before { delete product_url('nonsense') }
 
-      it { is_expected.to have_http_status(:not_found) }
+      it 'will have a :not_found response' do
+        expect(response).to have_http_status(:not_found)
+      end
 
       it 'will return not found error message' do
         error = {
@@ -249,7 +274,7 @@ RSpec.describe ProductsController do
           "code"=>"product_not_found",
           "detail"=>"This product does not exist, or has been deleted. Product can be removed by manufacturers or admins."
         }
-        expect(subject.body).to include_json(errors: [error])
+        expect(response.body).to include_json(errors: [error])
       end
     end
   end
