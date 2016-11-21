@@ -2,7 +2,7 @@ module DefaultFormat
   extend ActiveSupport::Concern
 
   included do
-    let(:default_format) { 'application/json' }
+    let(:default_format) { 'application/vnd.api+json' }
     prepend RequestHelpersCustomized
   end
 

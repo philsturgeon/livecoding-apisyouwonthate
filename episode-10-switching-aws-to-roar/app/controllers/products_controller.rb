@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
 
   include Roar::Rails::ControllerAdditions
-  respond_to :json
+  respond_to :json_api
 
   rescue_from ActiveRecord::RecordNotFound do |e|
     render_json_error :not_found, :product_not_found
@@ -9,7 +9,7 @@ class ProductsController < ApplicationController
 
   def index
     products = Product.take(10)
-    respond_with products, represent_items_with: ProductRepresenter
+    respond_with products, represent_with: ProductRepresenter.for_collection
   end
 
   def show

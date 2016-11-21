@@ -1,5 +1,5 @@
 require 'roar/decorator'
-require 'roar/json/json_api'
+# require 'roar/json/json_api'
 
 class ProductRepresenter < Roar::Decorator
   include Roar::JSON::JSONAPI
