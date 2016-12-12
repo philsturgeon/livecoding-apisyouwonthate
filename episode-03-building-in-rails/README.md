@@ -1,3 +1,4 @@
+# Episode 3: Basic Serialization 
 
 Video: https://youtu.be/A4XLCSZBN24
 
